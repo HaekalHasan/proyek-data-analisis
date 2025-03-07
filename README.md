@@ -27,15 +27,3 @@ Setelah instalasi selesai, jalankan aplikasi Streamlit dengan perintah berikut:
 ```bash
 streamlit run dashboard.py
 ```
-## Struktur Folder Proyek
-```bash
-/submission
-|-- dashboard/
-|   |-- dashboard.py        # Script Streamlit untuk dashboard
-|-- data/                   # Folder yang berisi dataset
-|   |-- day.csv
-|-- notebook.ipynb
-|-- requirements.txt        # Daftar dependensi Python
-|-- README.md               # Panduan untuk menjalankan proyek
-|-- url.txt
-```
