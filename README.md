@@ -9,15 +9,15 @@ Untuk menjalankan proyek ini, Anda perlu menginstal beberapa dependensi yang dip
 ### Setup Lingkungan - Anaconda
 Jika Anda menggunakan Anaconda, jalankan perintah berikut untuk membuat lingkungan baru dan menginstal dependensi:
 ```bash
-conda create --name bike-rental-dashboard python=3.9
-conda activate bike-rental-dashboard
+conda create --name submission python=3.9
+conda activate submission
 pip install -r requirements.txt
 ```
 ### Setup Lingkungan - Shell/Terminal
 Jika Anda menggunakan terminal biasa (tanpa Anaconda), jalankan perintah berikut:
 ```bash
-mkdir bike_rental_dashboard
-cd bike_rental_dashboard
+mkdir submission
+cd submission
 pipenv install
 pipenv shell
 pip install -r requirements.txt
