@@ -13,6 +13,8 @@ conda create --name bike-rental-dashboard python=3.9
 conda activate bike-rental-dashboard
 pip install -r requirements.txt
 ```
+### Setup Lingkungan - Shell/Terminal
+Jika Anda menggunakan terminal biasa (tanpa Anaconda), jalankan perintah berikut:
 ```bash
 mkdir bike_rental_dashboard
 cd bike_rental_dashboard
@@ -20,15 +22,20 @@ pipenv install
 pipenv shell
 pip install -r requirements.txt
 ```
+## Menjalankan Streamlit App
+Setelah instalasi selesai, jalankan aplikasi Streamlit dengan perintah berikut:
 ```bash
 streamlit run dashboard.py
 ```
+## Struktur Folder Proyek
 ```bash
-/bike_rental_dashboard
-|-- dashboard.py            # Script Streamlit untuk dashboard
+/submission
+|-- dashboard/
+|   |-- dashboard.py        # Script Streamlit untuk dashboard
 |-- data/                   # Folder yang berisi dataset
-|   |-- bike_rental_data.csv
+|   |-- day.csv
+|-- notebook.ipynb
 |-- requirements.txt        # Daftar dependensi Python
 |-- README.md               # Panduan untuk menjalankan proyek
-|-- .gitignore              # Daftar file dan folder yang diabaikan oleh Git
+|-- url.txt
 ```
