@@ -9,6 +9,23 @@ df_day['dteday'] = pd.to_datetime(df_day['dteday'])
 
 st.title("Bike Rental Analysis Dashboard")
 
+# Sidebar untuk Filter Interaktif
+st.sidebar.header("Filter Dashboard")
+
+# Filter Rentang Tanggal
+min_date = df_day['dteday'].min()
+max_date = df_day['dteday'].max()
+date_range = st.sidebar.date_input("Pilih Rentang Tanggal", [min_date, max_date], min_value=min_date, max_value=max_date)
+
+# Filter berdasarkan Cuaca
+weather_options = {1: "Clear", 2: "Mist", 3: "Light Snow/Rain"}
+selected_weather = st.sidebar.multiselect("Pilih Kondisi Cuaca", options=weather_options.keys(), format_func=lambda x: weather_options[x], default=list(weather_options.keys()))
+
+# Filter Data Berdasarkan Pilihan
+df_filtered = df_day[(df_day["dteday"] >= pd.to_datetime(date_range[0])) & (df_day["dteday"] <= pd.to_datetime(date_range[1]))]
+df_filtered = df_filtered[df_filtered["weathersit"].isin(selected_weather)]
+
+
 st.subheader("Dataset Preview")
 st.write(df_day.head())
 
@@ -16,15 +33,17 @@ st.write(df_day.head())
 st.subheader("Total rental berdasarkan Cuaca")
 weather_colors = {1: "blue", 2: "orange", 3: "red", 4: "grey"}
 weather_labels = {1: "Clear", 2: "Mist", 3: "Light Snow/Rain", 4: "Heavy Rain/Snow"}
-daily_weather = df_day.groupby(['dteday', 'weathersit'])['cnt'].sum().reset_index()
+daily_weather_filtered = df_filtered.groupby(['dteday', 'weathersit'])['cnt'].sum().reset_index()
 
 plt.figure(figsize=(12, 6))
 lines = []
 for weather, color in weather_colors.items():
-    subset = daily_weather[daily_weather['weathersit'] == weather]
-    line, = plt.plot(subset['dteday'], subset['cnt'], label=weather_labels[weather], color=color)
-    lines.append(line)
-plt.title("Total Penyewaan Sepeda Harian Berdasarkan Cuaca")
+    subset = daily_weather_filtered[daily_weather_filtered['weathersit'] == weather]
+    if not subset.empty:  # Pastikan subset tidak kosong agar tidak error
+        line, = plt.plot(subset['dteday'], subset['cnt'], label=weather_labels[weather], color=color)
+        lines.append(line)
+
+plt.title("Total Penyewaan Sepeda Harian Berdasarkan Cuaca (Filtered)")
 plt.xlabel("Tanggal")
 plt.ylabel("Total Rental")
 plt.xticks(rotation=45)
@@ -34,21 +53,17 @@ st.pyplot(plt)
 # Visualization: Working Day vs Weekend (Bar Plot)
 st.subheader("Working Day vs Weekend Rental Comparison")
 day_labels = {0: "Weekend/Holiday", 1: "Working Day"}
-
-day_data = df_day.groupby("workingday")["cnt"].mean().reset_index()
-day_data["Day Type"] = day_data["workingday"].map(day_labels)
-
-x = np.arange(len(day_data))
 colors = ["red", "blue"]
+
+day_data_filtered = df_filtered.groupby("workingday")["cnt"].mean().reset_index()
+day_data_filtered["Day Type"] = day_data_filtered["workingday"].map(day_labels)
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
-ax.bar(x, day_data["cnt"], color=colors)
-ax.set_title("Average Total Bike Rentals: Working Day vs Weekend")
+ax.bar(day_data_filtered["Day Type"], day_data_filtered["cnt"], color=colors)
+ax.set_title("Average Total Bike Rentals: Working Day vs Weekend (Filtered)")
 ax.set_ylabel("Average Number of Rentals")
 ax.set_xlabel("Day Type")
-ax.set_xticks(x)
-ax.set_xticklabels(day_data["Day Type"])
 
 st.pyplot(fig)
 
